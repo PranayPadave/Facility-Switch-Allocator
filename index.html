@@ -248,11 +248,11 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       </label>
     </div>
     <label class="chk"><input type="checkbox" id="strip" checked><span>Remove a leading ` or ' from codes in the output (Excel text artefact)</span></label>
-    <h2 style="margin-top:16px">Output file columns (Switch Sale Order Item Facility)</h2>
+    <h2 style="margin-top:16px">Output file columns (Switch Facility Sale Order Item)</h2>
     <div class="tpl">
-      <label class="f">Order column<input type="text" id="h1" value="Sale Order Code"></label>
-      <label class="f">Item column<input type="text" id="h2" value="Sale Order Item Code"></label>
-      <label class="f">New facility column<input type="text" id="h3" value="Facility"></label>
+      <label class="f">New facility column<input type="text" id="h1" value="Facility"></label>
+      <label class="f">Order column<input type="text" id="h2" value="Sale Order Code"></label>
+      <label class="f">Item column<input type="text" id="h3" value="Sale Order Item Code"></label>
     </div>
   </section>
   <section class="settings-section"><h3>Date filters</h3>
@@ -438,7 +438,7 @@ async function run(){
   const cfg={
     minInv:Math.max(0,Number($('#minInv').value)||0),
     mode:$('#mode').value,unmapped:$('#unmapped').value,strip:$('#strip').checked,
-    h1:$('#h1').value.trim()||'Sale Order Code',h2:$('#h2').value.trim()||'Sale Order Item Code',h3:$('#h3').value.trim()||'Facility'
+    h1:$('#h1').value.trim()||'Facility',h2:$('#h2').value.trim()||'Sale Order Code',h3:$('#h3').value.trim()||'Sale Order Item Code'
   };
   const rSales=dateRange('sales'),rUnf=dateRange('unf');
   const checks=[];const addCheck=(name,val,detail,lvl)=>checks.push([name,val,detail||'',lvl||'']);
@@ -603,8 +603,8 @@ async function run(){
   const outCode=v=>cfg.strip?stripPre(v):v;
   const nm=f=>facName.get(f)||f;
   const switchRows=[];
-  for(const r of results)if(r.fac)for(const l of r.o.lines)switchRows.push([outCode(l.soc),outCode(l.soic),nm(r.fac)]);
-  const tabSwitch={key:'switch',title:'Switch file',name:'Switch Sale Order Item Facility',
+  for(const r of results)if(r.fac)for(const l of r.o.lines)switchRows.push([nm(r.fac),outCode(l.soc),outCode(l.soic)]);
+  const tabSwitch={key:'switch',title:'Switch file',name:'Switch Facility Sale Order Item',
     cols:[cfg.h1,cfg.h2,cfg.h3],rows:switchRows,
     note:'This is the file to upload: one row per item with its new facility.'};
   const warehouses=[...inventoryFacilities].sort((a,b)=>a.localeCompare(b));
